@@ -13,15 +13,17 @@ module onebySix() {
     color("Peru")
     import("part_files_stl/1x6.stl");
 }
-
 module twobySix() { 
     color("Peru")
     import("part_files_stl/2x6.stl");
 }
-
 module twobyFour() { 
     color("Peru")
     import("part_files_stl/2x4.stl");
+}
+module fourbyFour() { 
+    color("Peru")
+    import("part_files_stl/4x4.stl");
 }
 /* Cuts */
 module cut3ft_off_twobySix() {
@@ -33,7 +35,13 @@ module cut3ft_off_twobySix() {
 module cut3ft_off_twobyFour() {
     color("Red")
     translate([-inch,feet*3,-inch])
-    cube([6*inch*2,feet*2*3,inch*2*2]);
+    cube([6*inch*2,feet*2*3,inch*2*4]);
+}
+
+module cut4ft_off_fourbyFour() {
+    color("Red")
+    translate([-inch,feet*1.5,-inch])
+    cube([6*inch*2,feet*2*3,inch*2*5]);
 }
 
 
@@ -59,6 +67,16 @@ module twobyFour_cut3ft() {
     }
 }
 
+module fourbyFour_cut4ft() {
+    color("Peru")
+    difference() {
+        fourbyFour();
+        union() {
+            cut4ft_off_fourbyFour();
+        }
+    }
+}
+
 /* Assemble Parts */
 
 rotate(90,[1,0,0])
@@ -69,6 +87,28 @@ translate([0,0,0]){
 
 rotate(-90,[0,0,1])
 rotate(-90,[0,1,0])
-translate([feet*1,0,lumbersixinch/2-lumbertwoinch/2]){
+translate([feet*0.75,0,lumbersixinch/2-lumbertwoinch/2]){
     twobyFour_cut3ft();
+}
+
+
+rotate(-90,[0,0,1])
+rotate(-90,[0,1,0])
+translate([feet*3-lumberfourinch,0,lumbersixinch/2-lumbertwoinch/2]){
+    twobyFour_cut3ft();
+}
+
+
+rotate(90,[1,0,0])
+rotate(90,[0,1,0])
+translate([0,0,feet*3-lumbertwoinch/2]){
+    twobySix_cut2ft();
+}
+
+translate([-lumberfourinch/2+lumbertwoinch/2,-feet*.5,0]){
+    fourbyFour_cut4ft();
+}
+
+translate([feet*3-lumberfourinch/2,-feet*.5,0]){
+    fourbyFour_cut4ft();
 }
