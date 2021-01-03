@@ -11,18 +11,32 @@ extracut = inch;
 feet = inch*12;
 
 /* Overall Tabletop dimensions */
-tablelength = 4.67*feet;
-tablewidth = 2*feet;
+
+// depth of table down onto legs
+topsupportdepth = 2*inch;
+// lip of table hanging over sides
+tablelip = 2*inch;
+
+tablelength = 4.667*feet;
+tablewidth = 4.667*feet;
 tabledepth = 2*inch;
 
 /* Overall bench dimensions in feet */
 benchheight = 2.75*feet;
-benchwidth = 2*feet;
-benchlength = 4.67*feet;
+benchwidth = tablewidth-tablelip*2;
+benchlength = tablelength-lumbersixinch-tablelip;
 
-/* Top Support Depth Cut */
-topsupportdepth = 2*inch;
+/* Secondary dimensions */
+// height of bottom support post
+bottomsupportheight = feet*.75;
 
+
+
+/* tabletop */
+module tableTop() {
+    color("Brown")
+    cube([tablewidth,tablelength,tabledepth]);
+}
 
 /* import parts */
 
@@ -62,13 +76,34 @@ module cut3ft_off_twobyFour() {
     translate([-inch,twobyFour_cutdim,-inch])
     cube([inch*12,twobyFour_cutdim+6*feet,inch*12]);
 }
+// Cut Feet to Specification
 module cut4ft_off_fourbyFour() {
     color("Red")
     translate([-inch,feet*1.5,-inch])
-    cube([6*inch*2,feet*2*3,inch*2*5]);
+    cube([feet,feet*6,feet]);
+}
+// Cut Support Holes in Feet
+module cutfeetsupporthole() {
+    color("Red")
+    translate([lumberfourinch/2-lumbertwoinch/2,feet/2,-inch])
+    cube([lumbertwoinch,lumbersixinch,feet]);
 }
 
-/* Cut Parts */
+// Cut Top Notches In Legs
+module cutlegtopnotch() {
+    color("Red")
+    translate([lumbersixinch/2-lumbertwoinch/2,benchheight-lumberfourinch-topsupportdepth,-inch])
+    cube([lumbertwoinch,lumberfourinch+extracut+topsupportdepth,feet]);
+    }
+// Cut Bottom Noches In Legs
+module cutlegbottomnotch() {
+    color("Red")
+    translate([lumbersixinch/2-lumbertwoinch/2,bottomsupportheight,-inch])
+    cube([lumbertwoinch,lumberfourinch,feet]);
+    }    
+    
+/* Finished, Cut Parts */
+// cut twobySix to length
 module twobySix_cut2ft() {
     color("Peru")
     difference() {
@@ -78,9 +113,9 @@ module twobySix_cut2ft() {
         }
     }
 }
-
+// cut twobyFour to length
 module twobyFour_cut3ft() {
-    color("Peru")
+    color("SaddleBrown")
     difference() {
         twobyFour();
         union() {
@@ -88,7 +123,7 @@ module twobyFour_cut3ft() {
         }
     }
 }
-
+// cut fourbyFour to length
 module fourbyFour_cut4ft() {
     color("Peru")
     difference() {
@@ -98,82 +133,116 @@ module fourbyFour_cut4ft() {
         }
     }
 }
+// Cut support feet with hole in center
+module supportfeet() {
+    color("SaddleBrown")
+    difference() {
+        fourbyFour_cut4ft(); {
+            union() {
+                cutfeetsupporthole();
+            }
+        }
+    }
+}
 
-/* Assemble Parts */
+module leg() {
+    color("Peru")
+    difference() {
+        twobySix_cut2ft(); {
+            union() {
+                cutlegbottomnotch();
+                cutlegtopnotch();
+            }
+        }
+    }
+}
 
+
+/* Test Area */
+
+
+
+
+
+// Assemble Parts 
 // Center Supports
-// Center Post
+
+// Center Post - A
 rotate(90,[1,0,0])
 rotate(90,[0,1,0])
-translate([0,0,0]){
-    twobySix_cut2ft();
+translate([tablelip,0,tablelip]){
+    leg();
 }
 
-// Center Foot
-translate([-lumberfourinch/2+lumbertwoinch/2,-feet*.5,0]){
-    fourbyFour_cut4ft();
+// Center Foot - A
+translate([lumbertwoinch/2-lumberfourinch/2+tablelip,-feet*.5+tablelip,0]){
+    supportfeet();
 }
 
-// Side Post
+// Side Post Leg - B
 rotate(90,[1,0,0])
 rotate(90,[0,1,0])
-translate([0,0,benchwidth-lumbertwoinch/2]){
-    twobySix_cut2ft();
+translate([tablelip,0,benchwidth+inch/2]){
+    leg();
 }
-// Side Foot
-translate([benchwidth-lumberfourinch/2,-feet*.5,0]){
-    fourbyFour_cut4ft();
+// Side Foot - B
+translate([benchwidth-lumberfourinch/2+lumbertwoinch/2+inch/2,-feet*.5+tablelip,0]){
+    supportfeet();
 }
 
-// Bottom twobyFour
+// Bottom twobyFour - AB_Bottom
 rotate(-90,[0,0,1])
 rotate(-90,[0,1,0])
-translate([feet*0.75,0,lumbersixinch/2-lumbertwoinch/2]){
+translate([bottomsupportheight,tablelip,lumbersixinch/2+tablelip-lumbertwoinch/2]){
     twobyFour_cut3ft();
 }
 
-// Top twobyFour
+// Top twobyFour AB_Top
 rotate(-90,[0,0,1])
 rotate(-90,[0,1,0])
-translate([benchheight-lumberfourinch-topsupportdepth,0,lumbersixinch/2-lumbertwoinch/2]){
+translate([benchheight-lumberfourinch-topsupportdepth,tablelip,lumbersixinch/2+tablelip-lumbertwoinch/2]){
     twobyFour_cut3ft();
 }
 
 
-// Side Supports
-// Center Post
+// Far Side Supports
+// Center Post - C
 rotate(90,[1,0,0])
 rotate(90,[0,1,0])
-translate([benchlength,0,0]){
-    twobySix_cut2ft();
+translate([benchlength,0,tablelip]){
+    leg();
 }
 
-// Center Foot
-translate([-lumberfourinch/2+lumbertwoinch/2,benchlength-feet*.5,0]){
-    fourbyFour_cut4ft();
+// Center Foot - C
+translate([tablelip-lumberfourinch/2+lumbertwoinch/2,benchlength-feet*.5,0]){
+    supportfeet();
 }
 
-// Side Post
+// Side Post - D
 rotate(90,[1,0,0])
 rotate(90,[0,1,0])
-translate([benchlength,0,benchwidth-lumbertwoinch/2]){
-    twobySix_cut2ft();
+translate([benchlength,0,benchwidth++inch/2]){
+    leg();
 }
-// Side Foot
-translate([benchwidth-lumberfourinch/2,benchlength-feet*.5,0]){
-    fourbyFour_cut4ft();
+// Side Foot - D
+translate([benchwidth-lumberfourinch/2+lumbertwoinch/2+inch/2,benchlength-feet*.5,0]){
+    supportfeet();
 }
 
-// Bottom twobyFour
+// Bottom twobyFour - CD_Bottom
 rotate(-90,[0,0,1])
 rotate(-90,[0,1,0])
-translate([feet*0.75,0,lumbersixinch/2-lumbertwoinch/2+benchlength]){
+translate([bottomsupportheight,tablelip,lumbersixinch/2-lumbertwoinch/2+benchlength]){
+    twobyFour_cut3ft();
+}
+// Top twobyFour - CD_Top
+rotate(-90,[0,0,1])
+rotate(-90,[0,1,0])
+translate([benchheight-lumberfourinch-topsupportdepth,tablelip,lumbersixinch/2-lumbertwoinch/2+benchlength]){
     twobyFour_cut3ft();
 }
 
-// Top twobyFour
-rotate(-90,[0,0,1])
-rotate(-90,[0,1,0])
-translate([benchheight-lumberfourinch-topsupportdepth,0,lumbersixinch/2-lumbertwoinch/2+benchlength]){
-    twobyFour_cut3ft();
+// Place tableTop
+translate([0,0,benchheight-topsupportdepth]){
+    tableTop();
 }
