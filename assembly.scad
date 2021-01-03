@@ -17,8 +17,8 @@ topsupportdepth = 2*inch;
 // lip of table hanging over sides
 tablelip = 2*inch;
 
-tablelength = 4.667*feet;
-tablewidth = 4.667*feet;
+tablelength = 5*feet;
+tablewidth = 3*feet;
 tabledepth = 2*inch;
 
 /* Overall bench dimensions in feet */
