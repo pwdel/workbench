@@ -15,10 +15,24 @@
 
 ### Progress Pictures
 
-#### Saturday, January 4th, 2021
+#### Saturday, January 2nd, 2021
 
 ![01](/assets/images/progresspics/progress01.png)
 
 ![02](/assets/images/progresspics/progress02.png)
 
 ![03](/assets/images/progresspics/progress03.png)
+
+##### Notes
+
+* The feet might be too big and get in the way of moving around the bench.  Need to be adjustable.
+* Need wooden dowels to keep everything stable.
+* Height should be around 29 or 30 inches, to keep it in line with desks that have been comfortable to use in the past.
+* Lip should be adjustable.
+
+#### Monday, January 4th, 2021
+
+* Making the feet adjustable makes creating the support holes to an exact dimension complicated. Need to double check feet support hole dimensions.
+* Making lip adjustable makes table width complicated.  Need to fix table width dimensions.
+* Rather than building up multi-variable distance calculations for every leg, foot and brace, we can specify a distance variable on a drawing and use those all-encompassing distance calculations, knowing that OpenScad calculates everything from the, "bottom right," dimension of a given part, starting at coordinate [0,0].
+* Looking at a design and realizing that it "feels," discombobulated should be celebrated, not mourned. A confused or disjointed design means that we took risks and attempted to be creative earlier on rather than designing for safety and laziness of design.

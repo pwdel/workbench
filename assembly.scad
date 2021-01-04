@@ -15,14 +15,15 @@ feet = inch*12;
 // depth of table down onto legs
 topsupportdepth = 2*inch;
 // lip of table hanging over sides
-tablelip = 2*inch;
+tablelip = 1*inch;
 
 tablelength = 5*feet;
 tablewidth = 3*feet;
 tabledepth = 2*inch;
 
 /* Overall bench dimensions in feet */
-benchheight = 2.75*feet;
+// subtract table depth to get table height
+benchheight = 2.5*feet - tabledepth; 
 benchwidth = tablewidth-tablelip*2;
 benchlength = tablelength-lumbersixinch-tablelip;
 
@@ -77,15 +78,16 @@ module cut3ft_off_twobyFour() {
     cube([inch*12,twobyFour_cutdim+6*feet,inch*12]);
 }
 // Cut Feet to Specification
+fourbyFour_cutdim = 1*feet;
 module cut4ft_off_fourbyFour() {
     color("Red")
-    translate([-inch,feet*1.5,-inch])
+    translate([-inch,fourbyFour_cutdim,-inch])
     cube([feet,feet*6,feet]);
 }
 // Cut Support Holes in Feet
 module cutfeetsupporthole() {
     color("Red")
-    translate([lumberfourinch/2-lumbertwoinch/2,feet/2,-inch])
+    translate([lumberfourinch/4,fourbyFour_cutdim/4,0])
     cube([lumbertwoinch,lumbersixinch,feet]);
 }
 
@@ -134,6 +136,9 @@ module fourbyFour_cut4ft() {
     }
 }
 // Cut support feet with hole in center
+// fourbyFour();
+//cut4ft_off_fourbyFour();
+// cutfeetsupporthole();
 module supportfeet() {
     color("SaddleBrown")
     difference() {
@@ -144,6 +149,9 @@ module supportfeet() {
         }
     }
 }
+
+translate([0,0,0])
+supportfeet();
 
 module leg() {
     color("Peru")
@@ -175,7 +183,7 @@ translate([tablelip,0,tablelip]){
 }
 
 // Center Foot - A
-translate([lumbertwoinch/2-lumberfourinch/2+tablelip,-feet*.5+tablelip,0]){
+translate([lumbertwoinch/2-lumberfourinch/2+tablelip,lumbersixinch/2+tablelip-fourbyFour_cutdim/2,-120]){
     supportfeet();
 }
 
@@ -186,7 +194,7 @@ translate([tablelip,0,benchwidth+inch/2]){
     leg();
 }
 // Side Foot - B
-translate([benchwidth-lumberfourinch/2+lumbertwoinch/2+inch/2,-feet*.5+tablelip,0]){
+translate([benchwidth-lumberfourinch/2+lumbertwoinch/2+inch/2,lumbersixinch/2+tablelip-fourbyFour_cutdim/2,0]){
     supportfeet();
 }
 
@@ -214,7 +222,7 @@ translate([benchlength,0,tablelip]){
 }
 
 // Center Foot - C
-translate([tablelip-lumberfourinch/2+lumbertwoinch/2,benchlength-feet*.5,0]){
+translate([tablelip-lumberfourinch/2+lumbertwoinch/2,benchlength-tablelip-lumbersixinch/2,-120]){
     supportfeet();
 }
 
