@@ -36,3 +36,10 @@
 * Making lip adjustable makes table width complicated.  Need to fix table width dimensions.
 * Rather than building up multi-variable distance calculations for every leg, foot and brace, we can specify a distance variable on a drawing and use those all-encompassing distance calculations, knowing that OpenScad calculates everything from the, "bottom right," dimension of a given part, starting at coordinate [0,0].
 * Looking at a design and realizing that it "feels," discombobulated should be celebrated, not mourned. A confused or disjointed design means that we took risks and attempted to be creative earlier on rather than designing for safety and laziness of design.
+
+
+#### Researching the Bench Designed
+
+* Andre Jacob Roubo
+
+https://www.instructables.com/A-Solid-and-Cheap-2x4-Workbench/
